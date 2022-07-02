@@ -32,30 +32,28 @@
         <label for="voiceName" class="form-label">声音：</label>
         <select name="voiceName" class="form-select">
         </select>
-        <div class="form-text">貌似接口就支持4种声音？推荐使用晓晓（晓晓yyds）。</div>
+        <div class="form-text">接口明确支持的的中文就这几种声音，需要其他声音可以自己手动填写。推荐使用晓晓（晓晓yyds）。</div>
       </div>
       <div class="mb-3">
-        <label for="styleName" class="form-label">讲话风格：</label>
-        <div class="input-group">
-          <span class="input-group-text">名称</span>
-          <input name="styleName" class="form-control" type="text" value="normal">
-          <span class="input-group-text">风格强度</span>
-          <input name="styleDegree" class="form-control" type="number" min="0.01" max="2.00" step=".01" value="1.00">
-        </div>
+        <label for="customVoiceName" class="form-label">自定义声音：</label>
+        <input name="customVoiceName" class="form-control" type="text" value="" />
         <div class="form-text">
-          每个声音支持的讲话风格都不一样，具体可以参考：https://docs.microsoft.com/zh-CN/azure/cognitive-services/speech-service/speech-synthesis-markup?tabs=csharp#adjust-speaking-styles
+          <p>如果上面没有你喜欢的声音，可以自己手动填写（不保证可用，不使用请留空）。【<a
+              href="https://docs.microsoft.com/zh-cn/azure/cognitive-services/speech-service/language-support?tabs=speechtotext#voice-styles-and-roles"
+              target="_blank">声音列表</a>】</p>
+          <p>如果出现 “Unsupported voice XXX” 错误，表示不支持当前声音。</p>
         </div>
       </div>
 
       <div class="mb-3">
         <label for="voiceFormat" class="form-label">音频格式：</label>
         <select name="voiceFormat" class="form-select">
-          <option value="raw-16khz-16bit-mono-pcm" disabled>raw-16khz-16bit-mono-pcm</option>
-          <option value="raw-48khz-16bit-mono-pcm" disabled>raw-48khz-16bit-mono-pcm</option>
-          <option value="raw-8khz-8bit-mono-mulaw" disabled>raw-8khz-8bit-mono-mulaw</option>
-          <option value="raw-8khz-8bit-mono-alaw" disabled>raw-8khz-8bit-mono-alaw</option>
-          <option value="raw-16khz-16bit-mono-truesilk" disabled>raw-16khz-16bit-mono-truesilk</option>
-          <option value="raw-24khz-16bit-mono-truesilk" disabled>raw-24khz-16bit-mono-truesilk</option>
+          <option value="raw-16khz-16bit-mono-pcm">raw-16khz-16bit-mono-pcm</option>
+          <option value="raw-48khz-16bit-mono-pcm">raw-48khz-16bit-mono-pcm</option>
+          <option value="raw-8khz-8bit-mono-mulaw">raw-8khz-8bit-mono-mulaw</option>
+          <option value="raw-8khz-8bit-mono-alaw">raw-8khz-8bit-mono-alaw</option>
+          <option value="raw-16khz-16bit-mono-truesilk">raw-16khz-16bit-mono-truesilk</option>
+          <option value="raw-24khz-16bit-mono-truesilk">raw-24khz-16bit-mono-truesilk</option>
           <option value="riff-16khz-16bit-mono-pcm">riff-16khz-16bit-mono-pcm</option>
           <option value="riff-24khz-16bit-mono-pcm">riff-24khz-16bit-mono-pcm</option>
           <option value="riff-48khz-16bit-mono-pcm">riff-48khz-16bit-mono-pcm</option>
@@ -69,13 +67,16 @@
           <option value="audio-24khz-160kbitrate-mono-mp3">audio-24khz-160kbitrate-mono-mp3</option>
           <option value="audio-48khz-96kbitrate-mono-mp3">audio-48khz-96kbitrate-mono-mp3</option>
           <option value="audio-48khz-192kbitrate-mono-mp3">audio-48khz-192kbitrate-mono-mp3</option>
-          <option value="webm-16khz-16bit-mono-opus" disabled>webm-16khz-16bit-mono-opus</option>
-          <option value="webm-24khz-16bit-mono-opus" disabled>webm-24khz-16bit-mono-opus</option>
-          <option value="ogg-16khz-16bit-mono-opus" selected>ogg-16khz-16bit-mono-opus</option>
+          <option value="webm-16khz-16bit-mono-opus">webm-16khz-16bit-mono-opus</option>
+          <option value="webm-24khz-16bit-mono-opus" selected>webm-24khz-16bit-mono-opus</option>
+          <option value="ogg-16khz-16bit-mono-opus">ogg-16khz-16bit-mono-opus</option>
           <option value="ogg-24khz-16bit-mono-opus">ogg-24khz-16bit-mono-opus</option>
           <option value="ogg-48khz-16bit-mono-opus">ogg-48khz-16bit-mono-opus</option>
         </select>
-        <div class="form-text">可以调整音频的格式和质量。质量越高，生成的文件越大，对网速和流量的需求越高。请根据自己的情况选择。（我禁用了一些在阅读中播放不了的格式）</div>
+        <div class="form-text">
+          <p>可以调整音频的格式和质量。质量越高，生成的文件越大，对网速和流量的需求越高。请根据自己的情况选择。</p>
+          <p>如果出现 “Unsupported output format: XXX” 错误，表示不支持当前格式。</p>
+        </div>
       </div>
 
       <div class="mb-3">
@@ -94,6 +95,7 @@
         <button type="button" class="btn btn-primary" onclick='createLegadoUrl()'>生成阅读（legado）语音引擎链接</button>
       </div>
     </form>
+    <div style="height:50px"></div>
   </div>
 
 
@@ -151,15 +153,13 @@
       });
     }
 
-    function createSSML(text, voiceName, styleName, styleDegree) {
+    function createSSML(text, voiceName) {
       var ssml = '\
         <speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US">\
           <voice name="'+ voiceName + '">\
-            <mstts:express-as style="'+ styleName + '" styledegree="' + styleDegree + '">\
               <prosody rate="0%" pitch="0%">\
                   '+ text + '\
               </prosody >\
-            </mstts:express-as>\
           </voice >\
         </speak > '
 
@@ -167,14 +167,13 @@
     }
 
     function preview() {
-      var headers = {'Content-Type': 'text/plain'};
-      var voiceName = document.getElementsByName('voiceName')[0].value;
+      var headers = { 'Content-Type': 'text/plain' };
+      var customVoiceName = document.getElementsByName('customVoiceName')[0].value;
+      var voiceName = customVoiceName != '' ? customVoiceName : document.getElementsByName('voiceName')[0].value;
       var voiceFormat = document.getElementsByName('voiceFormat')[0].value;
-      var styleName = document.getElementsByName('styleName')[0].value;
-      var styleDegree = document.getElementsByName('styleDegree')[0].value;
       var token = document.getElementsByName('token')[0].value;
       var previewText = document.getElementsByName('previewText')[0].value;
-      var ssml = createSSML(previewText, voiceName, styleName, styleDegree)
+      var ssml = createSSML(previewText, voiceName)
       if (token) {
         headers['Authorization'] = 'Bearer ' + token;
       }
@@ -194,39 +193,34 @@
         } else if (response.status == 401) {
           throw '无效的密钥';
         } else {
-          console.log(response);
-          throw '未知错误';
+          return response.text().then(text => Promise.reject(text));
         }
-      })
-      .then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
-      .then(audio => {
-        var player = ctx.createBufferSource();
-        player.buffer = audio;
-        player.connect(ctx.destination);
-        player.start(ctx.currentTime);
-      })
-      .catch(reason => {
-        alert(reason);
-      })
-      .finally(()=>{
-        button.disabled = false;
-      });
+      }).then(arrayBuffer => ctx.decodeAudioData(arrayBuffer))
+        .then(audio => {
+          var player = ctx.createBufferSource();
+          player.buffer = audio;
+          player.connect(ctx.destination);
+          player.start(ctx.currentTime);
+        })
+        .catch(reason => {
+          alert(reason);
+        })
+        .finally(() => {
+          button.disabled = false;
+        });
     }
 
     function createLegadoUrl() {
       var name = document.getElementsByName('name')[0].value;
-      var voiceName = document.getElementsByName('voiceName')[0].value;
+      var customVoiceName = document.getElementsByName('customVoiceName')[0].value;
+      var voiceName = customVoiceName != '' ? customVoiceName : document.getElementsByName('voiceName')[0].value;
       var voiceFormat = document.getElementsByName('voiceFormat')[0].value;
-      var styleName = document.getElementsByName('styleName')[0].value;
-      var styleDegree = document.getElementsByName('styleDegree')[0].value;
       var token = document.getElementsByName('token')[0].value;
       var previewText = document.getElementsByName('previewText')[0].value;
       var url = window.location.protocol + '//' + window.location.host + '/api/legado?api=' + encodeURI(window.location.protocol + '//' + window.location.host + '/api/ra')
         + '&name=' + encodeURI(name)
         + '&voiceName=' + voiceName
         + '&voiceFormat=' + voiceFormat
-        + '&styleName=' + styleName
-        + '&styleDegree=' + styleDegree
         + '&token=' + token;
       var svg = new QRCode(url).svg();
       var modal = new bootstrap.Modal(document.getElementById('legadoUrlModal'))
