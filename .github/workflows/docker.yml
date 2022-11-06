@@ -4,15 +4,14 @@ on:
   workflow_dispatch:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 env: 
-  DOCKER_REPOSITORY: meetcw/ms-ra-forwarder
+  DOCKER_REPOSITORY: wxxxcxx/ms-ra-forwarder
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: github.repository == 'wxxxcxx/ms-ra-forwarder'
     steps:
     - name: Checkout
       uses: actions/checkout@v2
