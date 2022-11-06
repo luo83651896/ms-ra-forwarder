@@ -22,7 +22,10 @@ module.exports = async (request: Request, response: Response) => {
     if (!FORMAT_CONTENT_TYPE.has(format)) {
       throw `无效的音频格式：${format}`
     }
-    let _body={};
+    let _body={
+     name:"zh-CN-YunxiNeural",
+     text:""
+    };
     try{
       _body = JSON.parse(request.body);}
     catch(e){
@@ -30,7 +33,7 @@ module.exports = async (request: Request, response: Response) => {
 
      for(let i=0;i<_b_tmp.length;i++){
       let _b=_b_tmp[i].split("=");
-      _body[_b[0]]=_b[1]
+      _body[_b[0]]=_b[1];
      }
     }
     let ssml =`<speak xmlns="http://www.w3.org/2001/10/synthesis" xmlns:mstts="http://www.w3.org/2001/mstts" xmlns:emo="http://www.w3.org/2009/10/emotionml" version="1.0" xml:lang="en-US"><voice name=${_body.name||"zh-CN-YunxiNeural"}><prosody>${_body.text}</prosody></voice ></speak >`;
